@@ -1,26 +1,48 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* fundo e superfícies */
+  --bg-page: #FAFAF9;
+  --bg-surface: #FFFFFF;
+  --bg-surface-alt: #F2F1EE;
+
+  /* texto */
+  --text-primary: #1C1C1A;
+  --text-secondary: #6B6A65;
+  --text-muted: #A3A199;
+
+  /* bordas */
+  --border: #E5E3DD;
+
+  /* acento (cor de marca) */
+  --accent: #2F6FED;
+  --accent-bg: #EAF1FE;
+  --accent-text: #1C4FB8;
+
+  /* apoio semântico */
+  --success: #2E9E6B;
+  --warning: #D89A2B;
+  --danger: #D94F4F;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-bg-page: var(--bg-page);
+  --color-bg-surface: var(--bg-surface);
+  --color-bg-surface-alt: var(--bg-surface-alt);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
+  --color-border: var(--border);
+  --color-accent: var(--accent);
+  --color-accent-bg: var(--accent-bg);
+  --color-accent-text: var(--accent-text);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
   --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg-page);
+  color: var(--text-primary);
 }

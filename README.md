@@ -1,36 +1,48 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Zitz
 
-## Getting Started
+App que organiza conteúdo salvo de redes sociais (TikTok, Instagram, Pinterest) em quatro
+categorias: Compras, Receitas, Lugares para Visitar e Beleza. Ver `docs/instrucoes-zitz.md` para a
+especificação completa.
 
-First, run the development server:
+## Stack
+
+- Next.js 16 (App Router) + Tailwind v4
+- Supabase (Postgres + Auth) — projeto `zitz` (`olcmukadkfhslbmxynjy`, org Primazoficial)
+- Anthropic API (Claude) para classificar e extrair dados dos links salvos
+
+## Setup
 
 ```bash
+npm install
+cp .env.local.example .env.local   # já preenchido com a URL/anon key do Supabase; falta a ANTHROPIC_API_KEY
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Gere uma chave em [console.anthropic.com](https://console.anthropic.com) e cole em
+`ANTHROPIC_API_KEY` no `.env.local` — sem ela, o endpoint `POST /api/items` (classificação e
+extração via IA) retorna erro 502.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Banco de dados
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Schema já aplicado no projeto Supabase `zitz` (tabelas `categories`, `partners`, `saved_items`,
+`lists`, `list_items` — ver seção 7 da spec). As 4 categorias iniciais já estão populadas. A tabela
+`partners` está vazia — sem parceiros cadastrados, os itens salvos ficam sem link de afiliado
+(usam o link original). Para gerar links de afiliado, insira linhas em `partners` com
+`affiliate_link_template` contendo `{url}` como placeholder da URL original, ex:
+`https://shopee.com.br/redirect?url={url}&afid=zitz`.
 
-## Learn More
+## Estrutura
 
-To learn more about Next.js, take a look at the following resources:
+- `app/[compras|receitas|lugares|beleza]` — vitrine de cada categoria (`app/lib/pagina-categoria.tsx`)
+- `app/novo` — formulário de "colar link" (MVP sem share extension nativo, ver seção 13 da spec)
+- `app/listas` — listas personalizadas por categoria, com opção de tornar pública e compartilhar
+- `app/api/items` — recebe o link, chama a IA para classificar/extrair, faz o matching de afiliado
+- `app/lib/extracao.ts` — prompt e chamada à API do Claude
+- `app/lib/afiliados.ts` — matching de parceiro e geração do link de afiliado
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Limitações conhecidas do MVP
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Não há scraping automático de legenda/thumbnail do TikTok/Instagram/Pinterest — o usuário cola a
+  legenda manualmente no formulário (a IA extrai bem melhor com ela).
+- Login é e-mail/senha (a spec sugere login social Google/Apple como melhoria futura).
+- Share extension nativo (iOS/Android) fica para depois — ver seção 8 da spec.
