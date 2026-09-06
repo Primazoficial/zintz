@@ -1,4 +1,4 @@
-# Instruções para Claude Code — Zitz (nome provisório)
+# Instruções para Claude Code — Zintz (nome provisório)
 
 > App que organiza conteúdo salvo de redes sociais (TikTok, Instagram, Pinterest) em quatro categorias: Compras, Receitas, Lugares para Visitar e Beleza. Modelo de referência: ReciMe, generalizado para múltiplos nichos com arquitetura de "categorias plugáveis".
 
@@ -19,7 +19,7 @@ Usuários de TikTok/Instagram no Brasil que salvam conteúdo de diferentes nicho
 | **Meus Lugares para Visitar** | Destinos, restaurantes, roteiros | Afiliado de reserva (Booking, Decolar, Trivago), passeios (GetYourGuide, Civitatis), restaurante (TheFork) |
 | **Beleza** | Produtos e rotinas de skincare/maquiagem | Afiliado de produto (Sephora, Beleza na Web) |
 
-**Monetização transversal (todas as categorias):** assinatura única do Zitz que desbloqueia recursos avançados nas quatro frentes ao mesmo tempo (lista de compras da receita, roteiro organizado, alertas de preço, rotina estruturada). Introduzir depois que o padrão de uso mostrar retorno em mais de uma categoria — não no lançamento.
+**Monetização transversal (todas as categorias):** assinatura única do Zintz que desbloqueia recursos avançados nas quatro frentes ao mesmo tempo (lista de compras da receita, roteiro organizado, alertas de preço, rotina estruturada). Introduzir depois que o padrão de uso mostrar retorno em mais de uma categoria — não no lançamento.
 
 ## 4. Funcionalidades do MVP
 
@@ -234,7 +234,7 @@ Base visual pensada pra ficar consistente com o Primaz, com leitura clean e clar
 }
 ```
 
-**Como aplicar no Zitz:** `--accent` pode ser trocado por app (mantendo azul no Primaz, por exemplo) sem alterar o resto da paleta. Dentro do próprio Zitz, cada categoria pode ter um tom de destaque sutil dentro da mesma família (ex: chip ativo de "Lugares" um pouco diferente do de "Compras"), mas a base neutra é sempre a mesma.
+**Como aplicar no Zintz:** `--accent` pode ser trocado por app (mantendo azul no Primaz, por exemplo) sem alterar o resto da paleta. Dentro do próprio Zintz, cada categoria pode ter um tom de destaque sutil dentro da mesma família (ex: chip ativo de "Lugares" um pouco diferente do de "Compras"), mas a base neutra é sempre a mesma.
 
 ## 12. Ordem de implementação sugerida para o Claude Code
 

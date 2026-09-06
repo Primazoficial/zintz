@@ -76,7 +76,7 @@ function EntrarConteudo() {
   return (
     <main className="min-h-screen flex flex-col items-center justify-center px-6 py-24 bg-bg-page">
       <h1 className="text-3xl font-bold text-text-primary">
-        Zit<span style={{ color: "var(--accent)" }}>z</span>
+        Zint<span style={{ color: "var(--accent)" }}>z</span>
       </h1>
 
       <p className="text-text-secondary text-sm mt-3 mb-8">

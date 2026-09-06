@@ -38,12 +38,12 @@ export default async function ListaCompartilhada({
       <header className="flex items-center justify-between px-5 py-4 bg-bg-surface border-b border-border">
         <div>
           <p className="text-xs text-text-muted">
-            Zit<span style={{ color: "var(--accent)" }}>z</span>
+            Zint<span style={{ color: "var(--accent)" }}>z</span>
           </p>
           <h1 className="text-lg font-semibold text-text-primary">{lista.name}</h1>
         </div>
         <Link href="/" className="text-sm" style={{ color: "var(--accent-text)" }}>
-          Conhecer o Zitz
+          Conhecer o Zintz
         </Link>
       </header>
 

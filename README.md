@@ -1,13 +1,14 @@
-# Zitz
+# Zintz
 
 App que organiza conteúdo salvo de redes sociais (TikTok, Instagram, Pinterest) em quatro
-categorias: Compras, Receitas, Lugares para Visitar e Beleza. Ver `docs/instrucoes-zitz.md` para a
+categorias: Compras, Receitas, Lugares para Visitar e Beleza. Ver `docs/instrucoes-zintz.md` para a
 especificação completa.
 
 ## Stack
 
 - Next.js 16 (App Router) + Tailwind v4
-- Supabase (Postgres + Auth) — projeto `zitz` (`olcmukadkfhslbmxynjy`, org Primazoficial)
+- Supabase (Postgres + Auth) — projeto `zitz` (`olcmukadkfhslbmxynjy`, org Primazoficial; nome do
+  projeto no Supabase ainda não foi renomeado, ver observação abaixo)
 - Anthropic API (Claude) para classificar e extrair dados dos links salvos
 
 ## Setup
@@ -29,7 +30,7 @@ Schema já aplicado no projeto Supabase `zitz` (tabelas `categories`, `partners`
 `partners` está vazia — sem parceiros cadastrados, os itens salvos ficam sem link de afiliado
 (usam o link original). Para gerar links de afiliado, insira linhas em `partners` com
 `affiliate_link_template` contendo `{url}` como placeholder da URL original, ex:
-`https://shopee.com.br/redirect?url={url}&afid=zitz`.
+`https://shopee.com.br/redirect?url={url}&afid=zintz`.
 
 ## Estrutura
 
@@ -46,3 +47,6 @@ Schema já aplicado no projeto Supabase `zitz` (tabelas `categories`, `partners`
   legenda manualmente no formulário (a IA extrai bem melhor com ela).
 - Login é e-mail/senha (a spec sugere login social Google/Apple como melhoria futura).
 - Share extension nativo (iOS/Android) fica para depois — ver seção 8 da spec.
+- O projeto Supabase ainda está com o nome `zitz` (id `olcmukadkfhslbmxynjy`) — a API MCP usada aqui
+  não tem operação de renomear projeto; para igualar ao nome do app, renomeie manualmente em
+  Project Settings no dashboard do Supabase.

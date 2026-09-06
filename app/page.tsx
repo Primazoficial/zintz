@@ -13,11 +13,11 @@ export default async function Home() {
   return (
     <main className="flex flex-1 flex-col items-center justify-center px-6 py-24 bg-bg-page text-center gap-6">
       <h1 className="text-4xl font-bold text-text-primary">
-        Zit<span style={{ color: "var(--accent)" }}>z</span>
+        Zint<span style={{ color: "var(--accent)" }}>z</span>
       </h1>
       <p className="max-w-md text-text-secondary">
         Salvou um achadinho, uma receita, um lugar ou uma rotina de beleza no TikTok ou Instagram?
-        Cole o link no Zitz e a gente organiza tudo pra você reencontrar depois.
+        Cole o link no Zintz e a gente organiza tudo pra você reencontrar depois.
       </p>
       <Link
         href="/entrar"

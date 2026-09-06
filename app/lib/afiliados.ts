@@ -32,7 +32,7 @@ export async function buscarParceiro(
 }
 
 // O template guarda "{url}" onde a URL original (codificada) deve entrar,
-// ex: "https://shopee.com.br/redirect?url={url}&afid=zitz".
+// ex: "https://shopee.com.br/redirect?url={url}&afid=zintz".
 export function gerarLinkAfiliado(partner: Partner, urlOriginal: string): string | null {
   if (!partner.affiliate_link_template) return null;
   return partner.affiliate_link_template.replace("{url}", encodeURIComponent(urlOriginal));

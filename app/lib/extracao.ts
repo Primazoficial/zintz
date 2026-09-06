@@ -12,7 +12,7 @@ export type ResultadoExtracao = {
   details: Detalhes;
 };
 
-const PROMPT_SISTEMA = `Você recebe a legenda e/ou transcrição de um vídeo de rede social (TikTok, Instagram ou Pinterest) que um usuário salvou no app Zitz.
+const PROMPT_SISTEMA = `Você recebe a legenda e/ou transcrição de um vídeo de rede social (TikTok, Instagram ou Pinterest) que um usuário salvou no app Zintz.
 
 Primeiro classifique o conteúdo em uma destas categorias: "compras", "receitas", "lugares" ou "beleza".
 
