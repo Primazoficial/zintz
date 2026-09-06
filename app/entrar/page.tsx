@@ -49,7 +49,9 @@ function EntrarConteudo() {
       const { data, error } = await supabase.auth.signUp({
         email,
         password: senha,
-        options: { emailRedirectTo: `${window.location.origin}/auth/callback?next=${proximo}` },
+        options: {
+          emailRedirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(proximo)}`,
+        },
       });
       if (error) {
         setStatus("error");

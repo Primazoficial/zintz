@@ -1,17 +1,38 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { Suspense, useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Cabecalho from "@/app/components/Cabecalho";
 import NavInferior from "@/app/components/NavInferior";
 
-export default function NovoItem() {
+// Quando o link chega pelo compartilhamento nativo do Android (Web Share Target),
+// alguns apps (ex: TikTok) colocam a URL dentro de "text" em vez do campo "url".
+function extrairUrlDoTexto(texto: string): string | null {
+  const match = texto.match(/https?:\/\/\S+/);
+  return match ? match[0] : null;
+}
+
+function FormularioNovoItem() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [sourceUrl, setSourceUrl] = useState("");
   const [caption, setCaption] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "error">("idle");
   const [mensagemErro, setMensagemErro] = useState("");
+
+  useEffect(() => {
+    const titulo = searchParams.get("title") ?? "";
+    const texto = searchParams.get("text") ?? "";
+    const urlRecebida = searchParams.get("url") ?? "";
+
+    const urlDetectada = urlRecebida || extrairUrlDoTexto(texto) || "";
+    if (urlDetectada) setSourceUrl(urlDetectada);
+
+    const restoDoTexto = urlDetectada ? texto.replace(urlDetectada, "").trim() : texto;
+    const legenda = [titulo, restoDoTexto].filter(Boolean).join("\n").trim();
+    if (legenda) setCaption(legenda);
+  }, [searchParams]);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -95,5 +116,13 @@ export default function NovoItem() {
 
       <NavInferior />
     </div>
+  );
+}
+
+export default function NovoItem() {
+  return (
+    <Suspense fallback={<div className="flex flex-col flex-1" />}>
+      <FormularioNovoItem />
+    </Suspense>
   );
 }

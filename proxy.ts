@@ -52,9 +52,11 @@ export async function proxy(request: NextRequest) {
   const precisaAuth = ROTAS_PROTEGIDAS.some((rota) => rotaAtual.startsWith(rota));
 
   if (precisaAuth && !user) {
+    const destinoComQuery = rotaAtual + request.nextUrl.search;
     const url = request.nextUrl.clone();
     url.pathname = "/entrar";
-    url.searchParams.set("next", rotaAtual);
+    url.search = "";
+    url.searchParams.set("next", destinoComQuery);
     return NextResponse.redirect(url);
   }
 
