@@ -1,6 +1,6 @@
 import { notFound, redirect } from "next/navigation";
 import { createSupabaseServerClient } from "@/app/lib/supabase-server";
-import type { CategoriaSlug, SavedItem } from "@/app/lib/categorias";
+import type { SavedItem } from "@/app/lib/pastas";
 import Cabecalho from "@/app/components/Cabecalho";
 import NavInferior from "@/app/components/NavInferior";
 import ListaDetalheClient from "@/app/components/ListaDetalheClient";
@@ -16,14 +16,11 @@ export default async function ListaDetalhe({ params }: { params: Promise<{ id: s
 
   const { data: lista } = await supabase
     .from("lists")
-    .select("id, name, is_public, user_id, category_id, categories(slug)")
+    .select("id, name, is_public, user_id, folder_id")
     .eq("id", id)
     .single();
 
   if (!lista) notFound();
-
-  const categoriaSlug = (lista.categories as unknown as { slug: CategoriaSlug } | null)?.slug;
-  if (!categoriaSlug) notFound();
 
   const souDono = lista.user_id === user.id;
 
@@ -43,7 +40,7 @@ export default async function ListaDetalhe({ params }: { params: Promise<{ id: s
       .from("saved_items")
       .select("*")
       .eq("user_id", user.id)
-      .eq("category_id", lista.category_id)
+      .eq("folder_id", lista.folder_id)
       .order("created_at", { ascending: false });
 
     itensDisponiveis = ((todosOsItens ?? []) as SavedItem[]).filter(
@@ -57,7 +54,6 @@ export default async function ListaDetalhe({ params }: { params: Promise<{ id: s
       <div className="flex-1 overflow-y-auto">
         <ListaDetalheClient
           listaId={lista.id}
-          categoria={categoriaSlug}
           isPublic={lista.is_public}
           souDono={souDono}
           itensNaLista={itensNaLista}

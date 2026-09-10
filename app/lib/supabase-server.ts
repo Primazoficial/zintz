@@ -13,9 +13,15 @@ export async function createSupabaseServerClient() {
           return cookieStore.getAll();
         },
         setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value, options }) =>
-            cookieStore.set(name, value, options)
-          );
+          try {
+            cookiesToSet.forEach(({ name, value, options }) =>
+              cookieStore.set(name, value, options)
+            );
+          } catch {
+            // Chamado a partir de um Server Component durante a renderização,
+            // onde cookies não podem ser gravados — o proxy.ts já cuida de
+            // manter a sessão renovada antes da página renderizar.
+          }
         },
       },
     }

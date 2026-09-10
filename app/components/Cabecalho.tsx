@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/app/lib/supabase";
 
-export default function Cabecalho({ titulo }: { titulo: string }) {
+export default function Cabecalho({ titulo }: { titulo: React.ReactNode }) {
   const router = useRouter();
 
   async function sair() {

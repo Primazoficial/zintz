@@ -2,7 +2,6 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 
 export type Partner = {
   id: string;
-  category_id: string;
   name: string;
   domain: string | null;
   affiliate_link_template: string | null;
@@ -10,19 +9,18 @@ export type Partner = {
 };
 
 // Procura um parceiro cadastrado cujo nome bate com a loja/plataforma que a
-// IA identificou (ex: likely_store "Shopee" -> partner "Shopee"). Comparação
-// simples por nome, suficiente para o volume inicial de parceiros do MVP.
+// IA identificou (ex: likely_store "Shopee" -> partner "Shopee"). Parceiros
+// são globais (não presos a pasta/categoria) — comparação simples por nome,
+// suficiente para o volume inicial de parceiros do MVP.
 export async function buscarParceiro(
   supabase: SupabaseClient,
-  categoryId: string,
   likelyStore: string | null
 ): Promise<Partner | null> {
   if (!likelyStore) return null;
 
   const { data, error } = await supabase
     .from("partners")
-    .select("id, category_id, name, domain, affiliate_link_template, partner_type")
-    .eq("category_id", categoryId)
+    .select("id, name, domain, affiliate_link_template, partner_type")
     .ilike("name", likelyStore.trim())
     .limit(1)
     .maybeSingle();

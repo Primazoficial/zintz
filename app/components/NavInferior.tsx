@@ -2,20 +2,20 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ORDEM_CATEGORIAS, CATEGORIAS } from "@/app/lib/categorias";
 
 export default function NavInferior() {
   const pathname = usePathname();
 
   const abas = [
-    ...ORDEM_CATEGORIAS.map((slug) => ({ href: `/${slug}`, label: CATEGORIAS[slug].nome })),
+    { href: "/", label: "Início" },
     { href: "/listas", label: "Listas" },
   ];
 
   return (
     <nav className="sticky bottom-0 left-0 right-0 bg-bg-surface border-t border-border flex justify-around py-2 z-10">
       {abas.map((aba) => {
-        const ativo = pathname === aba.href || pathname.startsWith(`${aba.href}/`);
+        const ativo =
+          aba.href === "/" ? pathname === "/" || pathname.startsWith("/pastas") : pathname.startsWith(aba.href);
         return (
           <Link
             key={aba.href}

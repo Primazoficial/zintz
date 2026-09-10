@@ -2,12 +2,11 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import type { CategoriaSlug, SavedItem } from "@/app/lib/categorias";
+import type { SavedItem } from "@/app/lib/pastas";
 import CardItem from "./CardItem";
 
 type Props = {
   listaId: string;
-  categoria: CategoriaSlug;
   isPublic: boolean;
   souDono: boolean;
   itensNaLista: SavedItem[];
@@ -16,7 +15,6 @@ type Props = {
 
 export default function ListaDetalheClient({
   listaId,
-  categoria,
   isPublic,
   souDono,
   itensNaLista,
@@ -112,7 +110,7 @@ export default function ListaDetalheClient({
           <div className="grid grid-cols-2 gap-3">
             {itensNaLista.map((item) => (
               <div key={item.id} className="flex flex-col gap-1">
-                <CardItem categoria={categoria} item={item} />
+                <CardItem item={item} />
                 {souDono && (
                   <button
                     onClick={() => removerItem(item.id)}
@@ -131,7 +129,7 @@ export default function ListaDetalheClient({
       {souDono && itensDisponiveis.length > 0 && (
         <div>
           <h2 className="text-sm font-semibold text-text-secondary mb-2">
-            Adicionar itens salvos nessa categoria
+            Adicionar itens salvos nessa pasta
           </h2>
           <ul className="flex flex-col gap-2">
             {itensDisponiveis.map((item) => (

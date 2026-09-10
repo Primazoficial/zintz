@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import { createSupabaseServerClient } from "@/app/lib/supabase-server";
 
-export async function POST(request: Request) {
+export async function PATCH(request: Request, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
   const supabase = await createSupabaseServerClient();
   const {
     data: { user },
@@ -13,26 +14,16 @@ export async function POST(request: Request) {
 
   const body = await request.json().catch(() => null);
   const name = typeof body?.name === "string" ? body.name.trim() : "";
-  const folderId = typeof body?.folder_id === "string" ? body.folder_id : "";
 
-  if (!name || !folderId) {
-    return NextResponse.json({ error: "Informe o nome e a pasta da lista." }, { status: 400 });
+  if (!name) {
+    return NextResponse.json({ error: "Informe o nome da pasta." }, { status: 400 });
   }
 
-  const { data: pasta, error: erroPasta } = await supabase
+  const { data: pasta, error } = await supabase
     .from("folders")
-    .select("id")
-    .eq("id", folderId)
+    .update({ name })
+    .eq("id", id)
     .eq("user_id", user.id)
-    .single();
-
-  if (erroPasta || !pasta) {
-    return NextResponse.json({ error: "Pasta inválida." }, { status: 400 });
-  }
-
-  const { data: lista, error } = await supabase
-    .from("lists")
-    .insert({ user_id: user.id, folder_id: pasta.id, name })
     .select()
     .single();
 
@@ -40,5 +31,5 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 
-  return NextResponse.json({ lista });
+  return NextResponse.json({ pasta });
 }

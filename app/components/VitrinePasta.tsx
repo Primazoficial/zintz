@@ -1,18 +1,12 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import type { CategoriaSlug, SavedItem } from "@/app/lib/categorias";
+import type { SavedItem } from "@/app/lib/pastas";
 import CardItem from "./CardItem";
 
 type Ordenacao = "recentes" | "subcategoria";
 
-export default function VitrineCategoria({
-  categoria,
-  itens,
-}: {
-  categoria: CategoriaSlug;
-  itens: SavedItem[];
-}) {
+export default function VitrinePasta({ itens }: { itens: SavedItem[] }) {
   const [busca, setBusca] = useState("");
   const [subcategoriaAtiva, setSubcategoriaAtiva] = useState<string | null>(null);
   const [ordenacao, setOrdenacao] = useState<Ordenacao>("recentes");
@@ -32,6 +26,7 @@ export default function VitrineCategoria({
       const bateTermo =
         termo.length === 0 ||
         item.title?.toLowerCase().includes(termo) ||
+        item.description?.toLowerCase().includes(termo) ||
         item.subcategory?.toLowerCase().includes(termo);
       const bateSubcategoria = !subcategoriaAtiva || item.subcategory === subcategoriaAtiva;
       return bateTermo && bateSubcategoria;
@@ -104,7 +99,7 @@ export default function VitrineCategoria({
       ) : (
         <div className="grid grid-cols-2 gap-3">
           {itensFiltrados.map((item) => (
-            <CardItem key={item.id} categoria={categoria} item={item} />
+            <CardItem key={item.id} item={item} />
           ))}
         </div>
       )}

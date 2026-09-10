@@ -2,12 +2,12 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { ORDEM_CATEGORIAS, CATEGORIAS, type CategoriaSlug } from "@/app/lib/categorias";
+import type { Pasta } from "@/app/lib/pastas";
 
-export default function FormNovaLista() {
+export default function FormNovaLista({ pastas }: { pastas: Pasta[] }) {
   const router = useRouter();
   const [nome, setNome] = useState("");
-  const [categoria, setCategoria] = useState<CategoriaSlug>("compras");
+  const [folderId, setFolderId] = useState(pastas[0]?.id ?? "");
   const [status, setStatus] = useState<"idle" | "loading" | "error">("idle");
   const [mensagemErro, setMensagemErro] = useState("");
 
@@ -19,7 +19,7 @@ export default function FormNovaLista() {
     const resposta = await fetch("/api/listas", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name: nome, category_slug: categoria }),
+      body: JSON.stringify({ name: nome, folder_id: folderId }),
     });
 
     if (!resposta.ok) {
@@ -46,13 +46,13 @@ export default function FormNovaLista() {
           className="flex-1 h-10 rounded-lg bg-bg-page border border-border px-3 text-sm text-text-primary outline-none focus:border-accent"
         />
         <select
-          value={categoria}
-          onChange={(e) => setCategoria(e.target.value as CategoriaSlug)}
+          value={folderId}
+          onChange={(e) => setFolderId(e.target.value)}
           className="h-10 rounded-lg bg-bg-page border border-border px-2 text-sm text-text-secondary outline-none"
         >
-          {ORDEM_CATEGORIAS.map((slug) => (
-            <option key={slug} value={slug}>
-              {CATEGORIAS[slug].nome}
+          {pastas.map((pasta) => (
+            <option key={pasta.id} value={pasta.id}>
+              {pasta.name}
             </option>
           ))}
         </select>

@@ -1,11 +1,16 @@
 import Anthropic from "@anthropic-ai/sdk";
-import type { CategoriaSlug, Detalhes } from "./categorias";
+import type { Detalhes } from "./pastas";
 
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
+// Arquétipo usado só pra sugerir em qual pasta padrão salvar — o item pode
+// terminar em qualquer pasta que o usuário escolher, isso não trava nada.
+export type ArquetipoPasta = "compras" | "receitas" | "lugares" | "beleza";
+
 export type ResultadoExtracao = {
-  category: CategoriaSlug;
+  arquetipo: ArquetipoPasta;
   title: string | null;
+  description: string | null;
   subcategory: string | null;
   likely_store: string | null;
   product_url: string | null;
@@ -14,9 +19,9 @@ export type ResultadoExtracao = {
 
 const PROMPT_SISTEMA = `Você recebe a legenda e/ou transcrição de um vídeo de rede social (TikTok, Instagram ou Pinterest) que um usuário salvou no app Zintz.
 
-Primeiro classifique o conteúdo em uma destas categorias: "compras", "receitas", "lugares" ou "beleza".
+Primeiro identifique qual destes arquétipos combina melhor com o conteúdo, só como sugestão de pasta: "compras", "receitas", "lugares" ou "beleza".
 
-Depois extraia os dados específicos da categoria escolhida:
+Depois extraia os dados específicos do arquétipo escolhido:
 
 - compras: product_name, subcategory (ex: casa, eletrônicos, moda), likely_store (loja mais provável de venda, ex: Shopee, Amazon, Mercado Livre), product_url (se mencionada explicitamente no texto)
 - receitas: recipe_name, ingredients (lista), prep_time (se mencionado), mentioned_products (utensílios/marcas citados, lista)
@@ -25,12 +30,13 @@ Depois extraia os dados específicos da categoria escolhida:
 
 Responda APENAS com um JSON no formato:
 {
-  "category": "compras" | "receitas" | "lugares" | "beleza",
+  "arquetipo": "compras" | "receitas" | "lugares" | "beleza",
   "title": string,               // nome curto e legível do item (produto, prato, lugar ou rotina)
-  "subcategory": string | null,  // subcategoria do produto/lugar, quando fizer sentido para a categoria
-  "likely_store": string | null, // loja mais provável, quando aplicável (compras/beleza)
+  "description": string,         // 1-2 frases descrevendo o post, em português, pra mostrar no card
+  "subcategory": string | null,  // subcategoria do produto/lugar, quando fizer sentido
+  "likely_store": string | null, // loja mais provável, só quando o post tiver um produto à venda
   "product_url": string | null,  // URL do produto mencionada explicitamente no texto, quando aplicável
-  "details": { ... }             // objeto com os campos específicos da categoria listados acima
+  "details": { ... }             // objeto com os campos específicos do arquétipo listados acima
 }
 
 Não inclua nenhum texto fora do JSON.`;
@@ -71,13 +77,14 @@ export async function classificarEExtrair(input: {
 
   const json = extrairJson(bloco.text) as Partial<ResultadoExtracao>;
 
-  if (!json.category || !["compras", "receitas", "lugares", "beleza"].includes(json.category)) {
-    throw new Error("A IA não retornou uma categoria válida.");
+  if (!json.arquetipo || !["compras", "receitas", "lugares", "beleza"].includes(json.arquetipo)) {
+    throw new Error("A IA não retornou um arquétipo válido.");
   }
 
   return {
-    category: json.category,
+    arquetipo: json.arquetipo,
     title: json.title ?? null,
+    description: json.description ?? null,
     subcategory: json.subcategory ?? null,
     likely_store: json.likely_store ?? null,
     product_url: json.product_url ?? null,

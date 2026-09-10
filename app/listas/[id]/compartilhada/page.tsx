@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createSupabaseServerClient } from "@/app/lib/supabase-server";
-import type { CategoriaSlug, SavedItem } from "@/app/lib/categorias";
+import type { SavedItem } from "@/app/lib/pastas";
 import CardItem from "@/app/components/CardItem";
 
 export default async function ListaCompartilhada({
@@ -14,15 +14,12 @@ export default async function ListaCompartilhada({
 
   const { data: lista } = await supabase
     .from("lists")
-    .select("id, name, is_public, categories(slug)")
+    .select("id, name, is_public")
     .eq("id", id)
     .eq("is_public", true)
     .single();
 
   if (!lista) notFound();
-
-  const categoriaSlug = (lista.categories as unknown as { slug: CategoriaSlug } | null)?.slug;
-  if (!categoriaSlug) notFound();
 
   const { data: linhas } = await supabase
     .from("list_items")
@@ -53,7 +50,7 @@ export default async function ListaCompartilhada({
         ) : (
           <div className="grid grid-cols-2 gap-3">
             {itens.map((item) => (
-              <CardItem key={item.id} categoria={categoriaSlug} item={item} />
+              <CardItem key={item.id} item={item} editavel={false} />
             ))}
           </div>
         )}
