@@ -1,22 +1,17 @@
-import { createServerClient } from "@supabase/ssr";
-import { isAuthRetryableFetchError } from "@supabase/supabase-js";
 import { NextResponse, type NextRequest } from "next/server";
+import { createServerClient } from "@supabase/ssr";
 
-const ROTAS_PROTEGIDAS = ["/compras", "/receitas", "/lugares", "/beleza", "/novo", "/listas"];
-
-// /listas/:id/compartilhada é a visão pública somente-leitura de uma lista
-// marcada como pública — precisa ficar acessível sem login.
-function ehRotaPublicaDeListaCompartilhada(pathname: string): boolean {
-  return /^\/listas\/[^/]+\/compartilhada\/?$/.test(pathname);
-}
+// Login automático só em dev/LAN — nunca roda em produção nem sem as
+// credenciais de dev configuradas, então a tela de /entrar continua valendo
+// normalmente para usuários reais.
+const emailDev = process.env.DEV_AUTO_LOGIN_EMAIL;
+const senhaDev = process.env.DEV_AUTO_LOGIN_SENHA;
+const autoLoginAtivo = process.env.NODE_ENV !== "production" && !!emailDev && !!senhaDev;
 
 export async function proxy(request: NextRequest) {
-  let response = NextResponse.next({ request });
+  if (!autoLoginAtivo) return NextResponse.next();
 
-  const rotaAtual = request.nextUrl.pathname;
-  if (ehRotaPublicaDeListaCompartilhada(rotaAtual)) {
-    return response;
-  }
+  let response = NextResponse.next({ request });
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -39,37 +34,15 @@ export async function proxy(request: NextRequest) {
 
   const {
     data: { user },
-    error,
   } = await supabase.auth.getUser();
 
-  // Erro de infraestrutura (5xx/rede) do serviço de Auth do Supabase — não
-  // significa que a sessão é inválida, só que a checagem falhou. Deixa a
-  // navegação seguir; o acesso a dados continua protegido pelas policies de RLS.
-  if (error && isAuthRetryableFetchError(error)) {
-    return response;
-  }
-
-  const precisaAuth = ROTAS_PROTEGIDAS.some((rota) => rotaAtual.startsWith(rota));
-
-  if (precisaAuth && !user) {
-    const destinoComQuery = rotaAtual + request.nextUrl.search;
-    const url = request.nextUrl.clone();
-    url.pathname = "/entrar";
-    url.search = "";
-    url.searchParams.set("next", destinoComQuery);
-    return NextResponse.redirect(url);
+  if (!user) {
+    await supabase.auth.signInWithPassword({ email: emailDev!, password: senhaDev! });
   }
 
   return response;
 }
 
 export const config = {
-  matcher: [
-    "/compras/:path*",
-    "/receitas/:path*",
-    "/lugares/:path*",
-    "/beleza/:path*",
-    "/novo/:path*",
-    "/listas/:path*",
-  ],
+  matcher: ["/((?!_next/static|_next/image|.*\\.(?:png|svg|ico|js|webmanifest)$).*)"],
 };
