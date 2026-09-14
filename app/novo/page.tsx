@@ -3,7 +3,6 @@
 import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Cabecalho from "@/app/components/Cabecalho";
-import NavInferior from "@/app/components/NavInferior";
 import { LIMITE_PASTAS, type PastaComContagem } from "@/app/lib/pastas";
 import type { ResultadoExtracao } from "@/app/lib/extracao";
 
@@ -157,7 +156,6 @@ function FormularioNovoItem() {
             </button>
           )}
         </div>
-        <NavInferior />
       </div>
     );
   }
@@ -204,7 +202,6 @@ function FormularioNovoItem() {
             </div>
           )}
         </div>
-        <NavInferior />
       </div>
     );
   }
@@ -269,8 +266,6 @@ function FormularioNovoItem() {
           </button>
         </form>
       </div>
-
-      <NavInferior />
     </div>
   );
 }

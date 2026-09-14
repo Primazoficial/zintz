@@ -12,6 +12,7 @@ export type ResultadoExtracao = {
   title: string | null;
   description: string | null;
   subcategory: string | null;
+  is_purchase: boolean;
   likely_store: string | null;
   product_url: string | null;
   details: Detalhes;
@@ -20,6 +21,8 @@ export type ResultadoExtracao = {
 const PROMPT_SISTEMA = `Você recebe a legenda e/ou transcrição de um vídeo de rede social (TikTok, Instagram ou Pinterest) que um usuário salvou no app Zintz.
 
 Primeiro identifique qual destes arquétipos combina melhor com o conteúdo, só como sugestão de pasta: "compras", "receitas", "lugares" ou "beleza".
+
+Depois decida se o post é sobre um produto específico à venda (is_purchase) — TikTok Shop, "link na bio", "achadinho", vitrine de produto, indicação de compra, etc. Marque true mesmo que nenhuma URL de produto apareça explicitamente no texto: muitos posts de compras (especialmente TikTok Shop) não trazem link nenhum na legenda, só o produto sendo mostrado/vendido. Marque false para conteúdo que só menciona produtos de passagem (ex: ingredientes de uma receita, produtos usados numa rotina que não é o foco do post).
 
 Depois extraia os dados específicos do arquétipo escolhido:
 
@@ -34,7 +37,8 @@ Responda APENAS com um JSON no formato:
   "title": string,               // nome curto e legível do item (produto, prato, lugar ou rotina)
   "description": string,         // 1-2 frases descrevendo o post, em português, pra mostrar no card
   "subcategory": string | null,  // subcategoria do produto/lugar, quando fizer sentido
-  "likely_store": string | null, // loja mais provável, só quando o post tiver um produto à venda
+  "is_purchase": boolean,        // true se o post é sobre um produto específico à venda
+  "likely_store": string | null, // loja mais provável, quando is_purchase for true (mesmo sem certeza absoluta — dê o melhor palpite, ex: "TikTok Shop" se não houver pista melhor)
   "product_url": string | null,  // URL do produto mencionada explicitamente no texto, quando aplicável
   "details": { ... }             // objeto com os campos específicos do arquétipo listados acima
 }
@@ -86,6 +90,7 @@ export async function classificarEExtrair(input: {
     title: json.title ?? null,
     description: json.description ?? null,
     subcategory: json.subcategory ?? null,
+    is_purchase: json.is_purchase === true,
     likely_store: json.likely_store ?? null,
     product_url: json.product_url ?? null,
     details: (json.details ?? {}) as Detalhes,

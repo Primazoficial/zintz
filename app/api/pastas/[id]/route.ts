@@ -19,9 +19,21 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
     return NextResponse.json({ error: "Informe o nome da pasta." }, { status: 400 });
   }
 
+  const atualizacoes: Record<string, string | null> = { name };
+
+  // Ícone é opcional na edição — se veio no corpo, emoji e foto são
+  // mutuamente exclusivos (mandar um limpa o outro).
+  if ("icon_image_url" in (body ?? {}) && body.icon_image_url) {
+    atualizacoes.icon_image_url = body.icon_image_url;
+    atualizacoes.icon_emoji = null;
+  } else if ("icon_emoji" in (body ?? {})) {
+    atualizacoes.icon_emoji = body.icon_emoji || null;
+    atualizacoes.icon_image_url = null;
+  }
+
   const { data: pasta, error } = await supabase
     .from("folders")
-    .update({ name })
+    .update(atualizacoes)
     .eq("id", id)
     .eq("user_id", user.id)
     .select()

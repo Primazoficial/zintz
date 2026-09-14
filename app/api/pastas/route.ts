@@ -44,6 +44,8 @@ export async function POST(request: Request) {
 
   const body = await request.json().catch(() => null);
   const name = typeof body?.name === "string" ? body.name.trim() : "";
+  const iconEmoji = typeof body?.icon_emoji === "string" ? body.icon_emoji : null;
+  const iconImageUrl = typeof body?.icon_image_url === "string" ? body.icon_image_url : null;
 
   if (!name) {
     return NextResponse.json({ error: "Informe o nome da pasta." }, { status: 400 });
@@ -67,7 +69,13 @@ export async function POST(request: Request) {
 
   const { data: pasta, error } = await supabase
     .from("folders")
-    .insert({ user_id: user.id, name, is_default: false })
+    .insert({
+      user_id: user.id,
+      name,
+      is_default: false,
+      icon_emoji: iconImageUrl ? null : iconEmoji,
+      icon_image_url: iconImageUrl,
+    })
     .select()
     .single();
 

@@ -1,11 +1,7 @@
 import { notFound, redirect } from "next/navigation";
 import { createSupabaseServerClient } from "@/app/lib/supabase-server";
-import type { PastaComContagem, SavedItem } from "@/app/lib/pastas";
-import Cabecalho from "@/app/components/Cabecalho";
-import TituloPasta from "@/app/components/TituloPasta";
-import AbasPastas from "@/app/components/AbasPastas";
-import NavInferior from "@/app/components/NavInferior";
-import VitrinePasta from "@/app/components/VitrinePasta";
+import type { FolderCategoria, PastaComContagem, SavedItem } from "@/app/lib/pastas";
+import PastaDetalheClient from "@/app/components/PastaDetalheClient";
 
 export default async function PastaDetalhe({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -16,11 +12,25 @@ export default async function PastaDetalhe({ params }: { params: Promise<{ id: s
 
   if (!user) redirect(`/entrar?next=/pastas/${id}`);
 
-  const { data: todasAsPastas } = await supabase
-    .from("folders")
-    .select("*, saved_items(count)")
-    .eq("user_id", user.id)
-    .order("created_at", { ascending: true });
+  const [{ data: todasAsPastas }, { data: itens }, { data: categorias }] = await Promise.all([
+    supabase
+      .from("folders")
+      .select("*, saved_items(count)")
+      .eq("user_id", user.id)
+      .order("created_at", { ascending: true }),
+    supabase
+      .from("saved_items")
+      .select("*")
+      .eq("user_id", user.id)
+      .eq("folder_id", id)
+      .order("created_at", { ascending: false }),
+    supabase
+      .from("folder_categories")
+      .select("*")
+      .eq("user_id", user.id)
+      .eq("folder_id", id)
+      .order("created_at", { ascending: true }),
+  ]);
 
   const pastas: PastaComContagem[] = (todasAsPastas ?? []).map((pasta) => {
     const { saved_items, ...resto } = pasta as typeof pasta & {
@@ -32,21 +42,12 @@ export default async function PastaDetalhe({ params }: { params: Promise<{ id: s
   const pastaAtual = pastas.find((pasta) => pasta.id === id);
   if (!pastaAtual) notFound();
 
-  const { data: itens } = await supabase
-    .from("saved_items")
-    .select("*")
-    .eq("user_id", user.id)
-    .eq("folder_id", id)
-    .order("created_at", { ascending: false });
-
   return (
-    <div className="flex flex-col flex-1">
-      <Cabecalho titulo={<TituloPasta pastaId={pastaAtual.id} nome={pastaAtual.name} />} />
-      <AbasPastas pastas={pastas} pastaAtualId={pastaAtual.id} />
-      <div className="flex-1 overflow-y-auto">
-        <VitrinePasta itens={(itens ?? []) as SavedItem[]} />
-      </div>
-      <NavInferior />
-    </div>
+    <PastaDetalheClient
+      pasta={pastaAtual}
+      pastas={pastas}
+      categorias={(categorias ?? []) as FolderCategoria[]}
+      itens={(itens ?? []) as SavedItem[]}
+    />
   );
 }

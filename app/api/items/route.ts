@@ -57,6 +57,7 @@ export async function POST(request: Request) {
       image_url: imagemInformada || null,
       subcategory: extraido.subcategory ?? null,
       details: extraido.details ?? {},
+      is_purchase: extraido.is_purchase === true,
       original_url: extraido.product_url ?? null,
       affiliate_url: affiliateUrl,
       partner_id: parceiro?.id ?? null,

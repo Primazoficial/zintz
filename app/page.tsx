@@ -1,10 +1,7 @@
 import Link from "next/link";
 import { createSupabaseServerClient } from "@/app/lib/supabase-server";
 import type { PastaComContagem } from "@/app/lib/pastas";
-import Cabecalho from "@/app/components/Cabecalho";
-import NavInferior from "@/app/components/NavInferior";
-import PastasGrid from "@/app/components/PastasGrid";
-import FormNovaPasta from "@/app/components/FormNovaPasta";
+import PastasHomeClient from "@/app/components/PastasHomeClient";
 
 export default async function Home() {
   const supabase = await createSupabaseServerClient();
@@ -45,14 +42,5 @@ export default async function Home() {
     return { ...resto, itens: saved_items?.[0]?.count ?? 0 };
   });
 
-  return (
-    <div className="flex flex-col flex-1">
-      <Cabecalho titulo="Zintz" />
-      <div className="flex-1 overflow-y-auto flex flex-col gap-4 py-4">
-        <PastasGrid pastas={pastas} />
-        <FormNovaPasta totalAtual={pastas.length} />
-      </div>
-      <NavInferior />
-    </div>
-  );
+  return <PastasHomeClient pastas={pastas} />;
 }

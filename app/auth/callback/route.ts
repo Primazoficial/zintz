@@ -7,7 +7,7 @@ export async function GET(request: Request) {
   const nextParam = searchParams.get("next");
   // Só aceita um path relativo — nunca uma URL absoluta, para não virar um
   // redirecionamento aberto caso o parâmetro seja adulterado.
-  const proximo = nextParam && nextParam.startsWith("/") ? nextParam : "/compras";
+  const proximo = nextParam && nextParam.startsWith("/") ? nextParam : "/";
 
   if (code) {
     const supabase = await createSupabaseServerClient();

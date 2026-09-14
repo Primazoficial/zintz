@@ -8,6 +8,7 @@ import {
   nomeDaPlataforma,
   type DetalhesCompras,
   type DetalhesBeleza,
+  type FolderCategoria,
   type SavedItem,
 } from "@/app/lib/pastas";
 
@@ -16,12 +17,21 @@ function nomeDaLoja(item: SavedItem): string {
   return detalhes?.likely_store ?? "Loja não identificada";
 }
 
-export default function CardItem({ item, editavel = true }: { item: SavedItem; editavel?: boolean }) {
+export default function CardItem({
+  item,
+  categorias = [],
+  editavel = true,
+}: {
+  item: SavedItem;
+  categorias?: FolderCategoria[];
+  editavel?: boolean;
+}) {
   const router = useRouter();
   const compra = ehItemDeCompra(item);
   const [editando, setEditando] = useState(false);
   const [descricao, setDescricao] = useState(item.description ?? "");
   const [salvando, setSalvando] = useState(false);
+  const [movendo, setMovendo] = useState(false);
 
   async function salvarDescricao() {
     setSalvando(true);
@@ -32,6 +42,17 @@ export default function CardItem({ item, editavel = true }: { item: SavedItem; e
     });
     setSalvando(false);
     setEditando(false);
+    router.refresh();
+  }
+
+  async function mudarCategoria(categoriaId: string) {
+    setMovendo(true);
+    await fetch(`/api/items/${item.id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ categoria_id: categoriaId || null }),
+    });
+    setMovendo(false);
     router.refresh();
   }
 
@@ -101,6 +122,22 @@ export default function CardItem({ item, editavel = true }: { item: SavedItem; e
           <span className="inline-block mt-1.5 text-[11px] px-2 py-0.5 rounded-full bg-bg-surface-alt text-text-secondary">
             {nomeDaPlataforma(item.source_platform)}
           </span>
+        )}
+
+        {editavel && categorias.length > 0 && (
+          <select
+            value={item.categoria_id ?? ""}
+            disabled={movendo}
+            onChange={(e) => mudarCategoria(e.target.value)}
+            className="mt-1.5 w-full text-[11px] bg-bg-page border border-border rounded-md px-1.5 py-1 text-text-secondary outline-none"
+          >
+            <option value="">Sem categoria</option>
+            {categorias.map((categoria) => (
+              <option key={categoria.id} value={categoria.id}>
+                {categoria.name}
+              </option>
+            ))}
+          </select>
         )}
       </div>
     </div>

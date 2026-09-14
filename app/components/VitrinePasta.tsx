@@ -1,12 +1,18 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import type { SavedItem } from "@/app/lib/pastas";
+import type { FolderCategoria, SavedItem } from "@/app/lib/pastas";
 import CardItem from "./CardItem";
 
 type Ordenacao = "recentes" | "subcategoria";
 
-export default function VitrinePasta({ itens }: { itens: SavedItem[] }) {
+export default function VitrinePasta({
+  itens,
+  categorias = [],
+}: {
+  itens: SavedItem[];
+  categorias?: FolderCategoria[];
+}) {
   const [busca, setBusca] = useState("");
   const [subcategoriaAtiva, setSubcategoriaAtiva] = useState<string | null>(null);
   const [ordenacao, setOrdenacao] = useState<Ordenacao>("recentes");
@@ -93,13 +99,13 @@ export default function VitrinePasta({ itens }: { itens: SavedItem[] }) {
       {itensFiltrados.length === 0 ? (
         <p className="text-sm text-text-muted text-center py-16">
           {itens.length === 0
-            ? "Nada por aqui ainda — toque em \"+ Novo\" para salvar seu primeiro link."
+            ? "Nada por aqui ainda — compartilhe um link do TikTok, Instagram ou Pinterest para o Zintz para salvar seu primeiro item."
             : "Nenhum item encontrado com esse filtro."}
         </p>
       ) : (
         <div className="grid grid-cols-2 gap-3">
           {itensFiltrados.map((item) => (
-            <CardItem key={item.id} item={item} />
+            <CardItem key={item.id} item={item} categorias={categorias} />
           ))}
         </div>
       )}

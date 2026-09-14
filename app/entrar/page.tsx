@@ -8,7 +8,7 @@ import { senhaValida, traduzirErroAuth } from "@/app/lib/auth-validacao";
 function EntrarConteudo() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const proximo = searchParams.get("next") ?? "/compras";
+  const proximo = searchParams.get("next") ?? "/";
   const [modo, setModo] = useState<"login" | "cadastro" | "recuperar">("login");
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
