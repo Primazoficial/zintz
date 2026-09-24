@@ -2,6 +2,7 @@
 
 import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { Link2, ChevronRight } from "lucide-react";
 import Cabecalho from "@/app/components/Cabecalho";
 import { LIMITE_PASTAS, type PastaComContagem } from "@/app/lib/pastas";
 import type { ResultadoExtracao } from "@/app/lib/extracao";
@@ -135,13 +136,13 @@ function FormularioNovoItem() {
               <div className="flex flex-col gap-3 w-full max-w-xs">
                 <button
                   onClick={() => salvarEm(pastaSugerida.id, extraido)}
-                  className="h-12 rounded-lg bg-accent text-white font-semibold hover:opacity-90 transition-opacity"
+                  className="h-[50px] rounded-2xl bg-accent text-white font-extrabold hover:opacity-90 transition-opacity"
                 >
                   Salvar em {pastaSugerida.name}
                 </button>
                 <button
                   onClick={() => setEtapa({ nome: "escolhendo", extraido, pastas })}
-                  className="h-11 rounded-lg text-sm text-text-secondary border border-border hover:border-accent transition-colors"
+                  className="h-11 rounded-2xl text-sm text-text-secondary border border-border hover:border-accent transition-colors"
                 >
                   Outra pasta
                 </button>
@@ -150,7 +151,7 @@ function FormularioNovoItem() {
           ) : (
             <button
               onClick={() => setEtapa({ nome: "escolhendo", extraido, pastas })}
-              className="h-12 px-6 rounded-lg bg-accent text-white font-semibold hover:opacity-90 transition-opacity"
+              className="h-[50px] px-6 rounded-2xl bg-accent text-white font-extrabold hover:opacity-90 transition-opacity"
             >
               Escolher pasta
             </button>
@@ -171,11 +172,13 @@ function FormularioNovoItem() {
               <li key={pasta.id}>
                 <button
                   onClick={() => salvarEm(pasta.id, extraido)}
-                  className="w-full flex items-center justify-between bg-bg-surface border border-border rounded-lg px-4 py-3 text-left hover:border-accent transition-colors"
+                  className="w-full flex items-center justify-between gap-3 bg-bg-surface p-4 text-left hover:-translate-y-0.5 transition-transform"
+                  style={{ borderRadius: "var(--radius-card)", boxShadow: "var(--shadow-card)" }}
                 >
-                  <span className="text-sm text-text-primary">{pasta.name}</span>
-                  <span className="text-xs text-text-muted">
+                  <span className="font-semibold text-text-primary">{pasta.name}</span>
+                  <span className="flex items-center gap-1.5 text-xs text-text-secondary shrink-0">
                     {pasta.itens === 0 ? "Vazia" : `${pasta.itens} ${pasta.itens === 1 ? "item" : "itens"}`}
+                    <ChevronRight size={16} className="text-text-muted" />
                   </span>
                 </button>
               </li>
@@ -183,19 +186,21 @@ function FormularioNovoItem() {
           </ul>
 
           {pastas.length < LIMITE_PASTAS && (
-            <div className="flex flex-col gap-2 bg-bg-surface border border-dashed border-border rounded-lg p-3">
+            <div
+              className="flex flex-col gap-2 bg-bg-surface border border-dashed border-border p-3"
+              style={{ borderRadius: "var(--radius-card)" }}
+            >
               <input
                 type="text"
                 value={novaPastaNome}
                 onChange={(e) => setNovaPastaNome(e.target.value)}
                 placeholder="Nome da nova pasta"
-                className="h-10 rounded-lg bg-bg-page border border-border px-3 text-sm text-text-primary outline-none focus:border-accent"
+                className="h-11 rounded-2xl bg-field-bg px-3 text-sm text-text-primary outline-none focus:ring-2 focus:ring-accent transition-shadow"
               />
               <button
                 onClick={() => criarPastaESalvar(extraido)}
                 disabled={!novaPastaNome.trim()}
-                className="h-10 rounded-lg bg-accent-bg text-sm font-medium disabled:opacity-50"
-                style={{ color: "var(--accent-text)" }}
+                className="h-11 rounded-2xl bg-accent-bg text-accent-text text-sm font-semibold disabled:opacity-50"
               >
                 Criar pasta e salvar aqui
               </button>
@@ -211,7 +216,11 @@ function FormularioNovoItem() {
       <Cabecalho titulo="Novo item" />
 
       <div className="flex-1 p-5">
-        <form onSubmit={classificar} className="flex flex-col gap-4 max-w-md mx-auto">
+        <form
+          onSubmit={classificar}
+          className="flex flex-col gap-4 max-w-md mx-auto bg-bg-surface p-5"
+          style={{ borderRadius: "var(--radius-card-hero)", boxShadow: "var(--shadow-hero)" }}
+        >
           <p className="text-sm text-text-secondary">
             Cole o link do vídeo/post do TikTok, Instagram ou Pinterest. Colar também a legenda
             ajuda bastante a IA a identificar a pasta certa e extrair os dados.
@@ -219,14 +228,17 @@ function FormularioNovoItem() {
 
           <label className="flex flex-col gap-1.5 text-sm text-text-secondary">
             Link
-            <input
-              type="url"
-              required
-              value={sourceUrl}
-              onChange={(e) => setSourceUrl(e.target.value)}
-              placeholder="https://www.tiktok.com/..."
-              className="h-11 rounded-lg bg-bg-surface border border-border px-3 text-text-primary outline-none focus:border-accent"
-            />
+            <span className="relative flex items-center">
+              <Link2 size={18} className="absolute left-4 text-accent pointer-events-none" />
+              <input
+                type="url"
+                required
+                value={sourceUrl}
+                onChange={(e) => setSourceUrl(e.target.value)}
+                placeholder="Cole o link do post aqui"
+                className="h-[50px] w-full rounded-2xl bg-field-bg pl-11 pr-4 text-text-primary placeholder:text-text-muted outline-none focus:ring-2 focus:ring-accent transition-shadow"
+              />
+            </span>
           </label>
 
           <label className="flex flex-col gap-1.5 text-sm text-text-secondary">
@@ -236,7 +248,7 @@ function FormularioNovoItem() {
               onChange={(e) => setCaption(e.target.value)}
               rows={4}
               placeholder="Cole aqui a legenda do post..."
-              className="rounded-lg bg-bg-surface border border-border px-3 py-2 text-text-primary outline-none focus:border-accent resize-none"
+              className="rounded-2xl bg-field-bg px-4 py-3 text-text-primary placeholder:text-text-muted outline-none focus:ring-2 focus:ring-accent transition-shadow resize-none"
             />
           </label>
 
@@ -247,7 +259,7 @@ function FormularioNovoItem() {
               value={imageUrl}
               onChange={(e) => setImageUrl(e.target.value)}
               placeholder="https://..."
-              className="h-11 rounded-lg bg-bg-surface border border-border px-3 text-text-primary outline-none focus:border-accent"
+              className="h-[50px] rounded-2xl bg-field-bg px-4 text-text-primary placeholder:text-text-muted outline-none focus:ring-2 focus:ring-accent transition-shadow"
             />
           </label>
 
@@ -256,13 +268,13 @@ function FormularioNovoItem() {
           <button
             type="submit"
             disabled={etapa.nome === "classificando" || etapa.nome === "salvando"}
-            className="h-12 rounded-lg bg-accent text-white font-semibold hover:opacity-90 transition-opacity disabled:opacity-50"
+            className="h-[50px] rounded-2xl bg-accent text-white font-extrabold hover:opacity-90 transition-opacity disabled:opacity-50"
           >
             {etapa.nome === "classificando"
               ? "Classificando com IA..."
               : etapa.nome === "salvando"
               ? "Salvando..."
-              : "Salvar"}
+              : "Salvar link"}
           </button>
         </form>
       </div>

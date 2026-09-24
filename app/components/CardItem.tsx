@@ -57,7 +57,10 @@ export default function CardItem({
   }
 
   return (
-    <div className="bg-bg-surface border border-border rounded-xl overflow-hidden hover:border-accent transition-colors">
+    <div
+      className="bg-bg-surface overflow-hidden"
+      style={{ borderRadius: "var(--radius-card)", boxShadow: "var(--shadow-card)" }}
+    >
       <a href={linkDoItem(item)} target="_blank" rel="noopener noreferrer nofollow" className="block">
         <div className="aspect-square bg-bg-surface-alt flex items-center justify-center overflow-hidden">
           {item.image_url ? (
@@ -69,12 +72,12 @@ export default function CardItem({
         </div>
       </a>
       <div className="p-3">
-        <p className="text-sm font-medium text-text-primary line-clamp-2">
+        <p className="text-sm font-bold text-text-primary line-clamp-2">
           {item.title ?? "Sem título"}
         </p>
 
         {compra ? (
-          <span className="inline-block mt-1 text-[11px] px-2 py-0.5 rounded-full bg-accent-bg text-accent-text truncate max-w-full">
+          <span className="inline-block mt-1.5 text-[11px] font-semibold px-2.5 py-1 rounded-full bg-accent-bg text-accent-text truncate max-w-full">
             {nomeDaLoja(item)}
           </span>
         ) : editando ? (
@@ -84,14 +87,13 @@ export default function CardItem({
               onChange={(e) => setDescricao(e.target.value)}
               rows={3}
               autoFocus
-              className="text-xs rounded-md bg-bg-page border border-border px-2 py-1.5 text-text-primary outline-none focus:border-accent resize-none"
+              className="text-xs rounded-xl bg-field-bg px-2.5 py-2 text-text-primary outline-none focus:ring-2 focus:ring-accent transition-shadow resize-none"
             />
-            <div className="flex gap-2">
+            <div className="flex gap-3">
               <button
                 onClick={salvarDescricao}
                 disabled={salvando}
-                className="text-[11px] font-medium"
-                style={{ color: "var(--accent-text)" }}
+                className="text-[11px] font-bold text-accent-text"
               >
                 {salvando ? "Salvando..." : "Salvar"}
               </button>
@@ -119,7 +121,7 @@ export default function CardItem({
         )}
 
         {!compra && (
-          <span className="inline-block mt-1.5 text-[11px] px-2 py-0.5 rounded-full bg-bg-surface-alt text-text-secondary">
+          <span className="inline-block mt-1.5 text-[11px] font-semibold px-2.5 py-1 rounded-full bg-bg-surface-alt text-navy">
             {nomeDaPlataforma(item.source_platform)}
           </span>
         )}
@@ -129,7 +131,7 @@ export default function CardItem({
             value={item.categoria_id ?? ""}
             disabled={movendo}
             onChange={(e) => mudarCategoria(e.target.value)}
-            className="mt-1.5 w-full text-[11px] bg-bg-page border border-border rounded-md px-1.5 py-1 text-text-secondary outline-none"
+            className="mt-2 w-full text-[11px] bg-field-bg rounded-xl px-2.5 py-2 text-text-secondary outline-none"
           >
             <option value="">Sem categoria</option>
             {categorias.map((categoria) => (

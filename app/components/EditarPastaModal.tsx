@@ -58,9 +58,10 @@ export default function EditarPastaModal({
       <form
         onSubmit={salvar}
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-sm flex flex-col gap-4 bg-bg-surface border border-border rounded-xl p-5"
+        className="w-full max-w-sm flex flex-col gap-4 bg-bg-surface p-5"
+        style={{ borderRadius: "var(--radius-card-hero)", boxShadow: "var(--shadow-hero)" }}
       >
-        <h2 className="text-sm font-semibold text-text-primary">Editar pasta</h2>
+        <h2 className="text-[20px] font-extrabold text-text-primary">Editar pasta</h2>
 
         <label className="flex flex-col gap-1.5 text-sm text-text-secondary">
           Nome
@@ -70,7 +71,7 @@ export default function EditarPastaModal({
             required
             value={nome}
             onChange={(e) => setNome(e.target.value)}
-            className="h-10 rounded-lg bg-bg-page border border-border px-3 text-text-primary outline-none focus:border-accent"
+            className="h-[50px] rounded-2xl bg-field-bg px-4 text-text-primary outline-none focus:ring-2 focus:ring-accent transition-shadow"
           />
         </label>
 
@@ -85,14 +86,14 @@ export default function EditarPastaModal({
           <button
             type="submit"
             disabled={salvando}
-            className="flex-1 h-10 rounded-lg bg-accent text-white text-sm font-semibold hover:opacity-90 transition-opacity disabled:opacity-50"
+            className="flex-1 h-11 rounded-2xl bg-accent text-white text-sm font-extrabold hover:opacity-90 transition-opacity disabled:opacity-50"
           >
             {salvando ? "Salvando..." : "Salvar"}
           </button>
           <button
             type="button"
             onClick={onFechar}
-            className="h-10 px-4 rounded-lg text-sm text-text-muted"
+            className="h-11 px-4 rounded-2xl text-sm text-text-muted hover:bg-bg-surface-alt transition-colors"
           >
             Cancelar
           </button>

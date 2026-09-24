@@ -11,17 +11,15 @@ export default function AbasPastas({
   if (pastas.length <= 1) return null;
 
   return (
-    <nav className="flex gap-2 overflow-x-auto px-4 py-3 bg-bg-surface border-b border-border -mx-0">
+    <nav className="flex gap-2 overflow-x-auto px-4 py-3 bg-bg-surface border-b border-border">
       {pastas.map((pasta) => {
         const ativa = pasta.id === pastaAtualId;
         return (
           <Link
             key={pasta.id}
             href={`/pastas/${pasta.id}`}
-            className={`shrink-0 text-xs px-3 py-1.5 rounded-full border transition-colors ${
-              ativa
-                ? "bg-accent-bg border-accent text-accent-text font-medium"
-                : "bg-bg-surface-alt border-border text-text-secondary"
+            className={`shrink-0 flex items-center h-10 px-4 rounded-full text-sm font-semibold transition-colors ${
+              ativa ? "bg-navy text-white" : "bg-bg-surface-alt text-navy"
             }`}
           >
             {pasta.name}

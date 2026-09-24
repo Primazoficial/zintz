@@ -52,9 +52,9 @@ export default function IconPicker({
   }
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-3">
       <div className="flex items-center gap-3">
-        <span className="w-12 h-12 rounded-lg bg-bg-surface-alt flex items-center justify-center text-2xl overflow-hidden shrink-0">
+        <span className="w-12 h-12 rounded-[15px] bg-accent-bg flex items-center justify-center text-2xl overflow-hidden shrink-0">
           {valor.icon_image_url ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={valor.icon_image_url} alt="" className="w-full h-full object-cover" />
@@ -66,8 +66,7 @@ export default function IconPicker({
           type="button"
           onClick={() => inputRef.current?.click()}
           disabled={enviando}
-          className="text-xs font-medium disabled:opacity-50"
-          style={{ color: "var(--accent-text)" }}
+          className="h-11 px-3 text-sm font-semibold text-accent-text disabled:opacity-50"
         >
           {enviando ? "Enviando..." : "Enviar foto"}
         </button>
@@ -82,16 +81,17 @@ export default function IconPicker({
 
       {erro && <p className="text-xs text-danger">{erro}</p>}
 
-      <div className="grid grid-cols-8 gap-1">
+      <div className="grid grid-cols-6 gap-1.5">
         {EMOJIS_PADRAO.map((emoji) => (
           <button
             key={emoji}
             type="button"
+            aria-label={`Usar ícone ${emoji}`}
             onClick={() => onChange({ icon_emoji: emoji, icon_image_url: null })}
-            className={`h-8 w-8 rounded-md flex items-center justify-center text-lg transition-colors ${
+            className={`h-11 w-11 rounded-[15px] flex items-center justify-center text-lg transition-colors ${
               !valor.icon_image_url && valor.icon_emoji === emoji
-                ? "bg-accent-bg border border-accent"
-                : "hover:bg-bg-surface-alt"
+                ? "bg-accent-bg ring-2 ring-accent"
+                : "bg-bg-surface-alt hover:bg-accent-bg"
             }`}
           >
             {emoji}
