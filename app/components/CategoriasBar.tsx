@@ -13,14 +13,12 @@ export default function CategoriasBar({
 
   return (
     <div className="flex flex-col gap-1.5 px-4 pt-3">
-      <span className="text-xs font-medium text-text-muted">Categorias</span>
+      <span className="text-xs font-semibold text-text-muted">Categorias</span>
       <div className="flex gap-2 overflow-x-auto pb-1 -mx-1 px-1">
         <button
           onClick={() => onSelecionar(null)}
-          className={`shrink-0 text-xs px-3 py-1.5 rounded-full border transition-colors ${
-            categoriaAtivaId === null
-              ? "bg-accent-bg border-accent text-accent-text"
-              : "bg-bg-surface-alt border-border text-text-secondary"
+          className={`shrink-0 flex items-center h-10 px-4 rounded-full text-sm font-semibold transition-colors ${
+            categoriaAtivaId === null ? "bg-navy text-white" : "bg-bg-surface-alt text-navy"
           }`}
         >
           Todas
@@ -29,10 +27,8 @@ export default function CategoriasBar({
           <button
             key={categoria.id}
             onClick={() => onSelecionar(categoria.id)}
-            className={`shrink-0 text-xs px-3 py-1.5 rounded-full border transition-colors ${
-              categoriaAtivaId === categoria.id
-                ? "bg-accent-bg border-accent text-accent-text"
-                : "bg-bg-surface-alt border-border text-text-secondary"
+            className={`shrink-0 flex items-center h-10 px-4 rounded-full text-sm font-semibold transition-colors ${
+              categoriaAtivaId === categoria.id ? "bg-navy text-white" : "bg-bg-surface-alt text-navy"
             }`}
           >
             {categoria.name}

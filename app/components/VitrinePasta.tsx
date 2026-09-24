@@ -54,17 +54,15 @@ export default function VitrinePasta({
         value={busca}
         onChange={(e) => setBusca(e.target.value)}
         placeholder="Buscar nos itens salvos..."
-        className="w-full h-11 rounded-lg bg-bg-surface border border-border px-4 text-sm text-text-primary placeholder:text-text-muted outline-none focus:border-accent transition-colors"
+        className="w-full h-[50px] rounded-2xl bg-field-bg px-4 text-sm text-text-primary placeholder:text-text-muted outline-none focus:ring-2 focus:ring-accent transition-shadow"
       />
 
       {subcategorias.length > 0 && (
         <div className="flex gap-2 overflow-x-auto pb-1 -mx-1 px-1">
           <button
             onClick={() => setSubcategoriaAtiva(null)}
-            className={`shrink-0 text-xs px-3 py-1.5 rounded-full border transition-colors ${
-              subcategoriaAtiva === null
-                ? "bg-accent-bg border-accent text-accent-text"
-                : "bg-bg-surface-alt border-border text-text-secondary"
+            className={`shrink-0 flex items-center h-10 px-4 rounded-full text-sm font-semibold capitalize transition-colors ${
+              subcategoriaAtiva === null ? "bg-navy text-white" : "bg-bg-surface-alt text-navy"
             }`}
           >
             Todas
@@ -73,10 +71,8 @@ export default function VitrinePasta({
             <button
               key={sub}
               onClick={() => setSubcategoriaAtiva(sub)}
-              className={`shrink-0 text-xs px-3 py-1.5 rounded-full border capitalize transition-colors ${
-                subcategoriaAtiva === sub
-                  ? "bg-accent-bg border-accent text-accent-text"
-                  : "bg-bg-surface-alt border-border text-text-secondary"
+              className={`shrink-0 flex items-center h-10 px-4 rounded-full text-sm font-semibold capitalize transition-colors ${
+                subcategoriaAtiva === sub ? "bg-navy text-white" : "bg-bg-surface-alt text-navy"
               }`}
             >
               {sub}
@@ -89,7 +85,7 @@ export default function VitrinePasta({
         <select
           value={ordenacao}
           onChange={(e) => setOrdenacao(e.target.value as Ordenacao)}
-          className="text-xs bg-bg-surface border border-border rounded-md px-2 py-1 text-text-secondary outline-none"
+          className="text-xs bg-bg-surface border border-border rounded-full px-3 py-1.5 text-text-secondary outline-none"
         >
           <option value="recentes">Mais recentes</option>
           <option value="subcategoria">Por subcategoria</option>

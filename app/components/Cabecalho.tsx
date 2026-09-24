@@ -1,8 +1,6 @@
-"use client";
-
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { supabase } from "@/app/lib/supabase";
+import Logo from "./Logo";
+import BotaoSair from "./BotaoSair";
 
 export default function Cabecalho({
   titulo,
@@ -11,19 +9,11 @@ export default function Cabecalho({
   titulo?: React.ReactNode;
   acao?: React.ReactNode;
 }) {
-  const router = useRouter();
-
-  async function sair() {
-    await supabase.auth.signOut();
-    router.push("/entrar");
-    router.refresh();
-  }
-
   return (
     <header className="flex items-center justify-between gap-3 px-5 py-4 bg-bg-surface border-b border-border">
       <div className="flex items-center gap-2 min-w-0">
-        <Link href="/" className="text-lg font-bold text-text-primary shrink-0">
-          Zint<span style={{ color: "var(--accent)" }}>z</span>
+        <Link href="/" className="shrink-0 flex items-center" aria-label="Ir para a página inicial">
+          <Logo size={30} />
         </Link>
         {titulo && (
           <>
@@ -34,9 +24,7 @@ export default function Cabecalho({
       </div>
       <div className="flex items-center gap-3 shrink-0">
         {acao}
-        <button onClick={sair} className="text-sm text-text-muted hover:text-text-secondary transition-colors">
-          Sair
-        </button>
+        <BotaoSair className="h-11 px-1 text-sm text-text-muted hover:text-text-secondary transition-colors" />
       </div>
     </header>
   );

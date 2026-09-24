@@ -29,25 +29,16 @@ export const EMOJIS_PADRAO = [
   "🌿", "⭐", "❤️", "📁",
 ];
 
-// Paleta usada pra cor de fundo do ícone das pastas. As 4 pastas padrão têm
-// cor fixa pelo slug; pastas criadas pelo usuário recebem uma cor da paleta
-// por ordem de criação, pra cada uma ter uma identidade visual sem precisar
-// perguntar.
-const CORES_PADRAO: Record<string, { corAcento: string; corAcentoBg: string; icone: string }> = {
-  compras: { corAcento: "#2F6FED", corAcentoBg: "#EAF1FE", icone: "🛍️" },
-  receitas: { corAcento: "#D89A2B", corAcentoBg: "#FBF1DF", icone: "🍳" },
-  lugares: { corAcento: "#2E9E6B", corAcentoBg: "#E5F5EE", icone: "📍" },
-  beleza: { corAcento: "#D94F4F", corAcentoBg: "#FBE8E8", icone: "💄" },
+// Emoji padrão de cada pasta pré-determinada, usado até o usuário escolher
+// outro ícone. O quadrado do ícone em si usa sempre a mesma cor (azul-nuvem
+// de fundo, azul Zintz no traço) — a identidade visual da Beta não varia essa
+// cor por pasta.
+const EMOJI_PADRAO_POR_SLUG: Record<string, string> = {
+  compras: "🛍️",
+  receitas: "🍳",
+  lugares: "📍",
+  beleza: "💄",
 };
-
-const PALETA_ROTATIVA = [
-  { corAcento: "#7C5FE0", corAcentoBg: "#EFEAFC", icone: "📁" },
-  { corAcento: "#1FA2B8", corAcentoBg: "#E3F5F8", icone: "📁" },
-  { corAcento: "#C2588A", corAcentoBg: "#FAEAF1", icone: "📁" },
-  { corAcento: "#6B8E23", corAcentoBg: "#EFF5E3", icone: "📁" },
-  { corAcento: "#B8722E", corAcentoBg: "#FBEEE2", icone: "📁" },
-  { corAcento: "#4A6FA5", corAcentoBg: "#E7EFF8", icone: "📁" },
-];
 
 export type AparenciaPasta = {
   corAcento: string;
@@ -60,23 +51,18 @@ export type AparenciaPasta = {
 export function aparenciaDaPasta(
   pasta: Pick<Pasta, "slug" | "id" | "icon_emoji" | "icon_image_url">
 ): AparenciaPasta {
-  let padrao = pasta.slug ? CORES_PADRAO[pasta.slug] : undefined;
-  if (!padrao) {
-    let hash = 0;
-    for (let i = 0; i < pasta.id.length; i++) hash = (hash * 31 + pasta.id.charCodeAt(i)) >>> 0;
-    padrao = PALETA_ROTATIVA[hash % PALETA_ROTATIVA.length];
-  }
-
-  const { corAcento, corAcentoBg, icone } = padrao;
+  const corAcento = "#1D4ED8";
+  const corAcentoBg = "#DBEAFE";
+  const emojiPadrao = (pasta.slug && EMOJI_PADRAO_POR_SLUG[pasta.slug]) || "📁";
 
   if (pasta.icon_image_url) {
-    return { corAcento, corAcentoBg, tipo: "imagem", emoji: icone, imagemUrl: pasta.icon_image_url };
+    return { corAcento, corAcentoBg, tipo: "imagem", emoji: emojiPadrao, imagemUrl: pasta.icon_image_url };
   }
   return {
     corAcento,
     corAcentoBg,
     tipo: "emoji",
-    emoji: pasta.icon_emoji ?? icone,
+    emoji: pasta.icon_emoji ?? emojiPadrao,
     imagemUrl: null,
   };
 }
