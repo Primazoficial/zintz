@@ -4,6 +4,7 @@ import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { supabase } from "@/app/lib/supabase";
 import { senhaValida, traduzirErroAuth } from "@/app/lib/auth-validacao";
+import Logo from "@/app/components/Logo";
 
 function EntrarConteudo() {
   const router = useRouter();
@@ -77,11 +78,9 @@ function EntrarConteudo() {
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center px-6 py-24 bg-bg-page">
-      <h1 className="text-3xl font-bold text-text-primary">
-        Zint<span style={{ color: "var(--accent)" }}>z</span>
-      </h1>
+      <Logo size={56} showWordmark tagline={modo === "login"} />
 
-      <p className="text-text-secondary text-sm mt-3 mb-8">
+      <p className="text-text-secondary text-sm mt-4 mb-8">
         {modo === "cadastro"
           ? "Crie sua conta para começar"
           : modo === "recuperar"
@@ -96,7 +95,7 @@ function EntrarConteudo() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="Seu e-mail"
-          className="w-full h-12 rounded-lg bg-bg-surface border border-border px-4 text-text-primary placeholder:text-text-muted outline-none focus:border-accent transition-colors"
+          className="w-full h-[50px] rounded-2xl bg-field-bg px-4 text-text-primary placeholder:text-text-muted outline-none focus:ring-2 focus:ring-accent transition-shadow"
         />
 
         {modo !== "recuperar" && (
@@ -106,7 +105,7 @@ function EntrarConteudo() {
             value={senha}
             onChange={(e) => setSenha(e.target.value)}
             placeholder="Sua senha"
-            className="w-full h-12 rounded-lg bg-bg-surface border border-border px-4 text-text-primary placeholder:text-text-muted outline-none focus:border-accent transition-colors"
+            className="w-full h-[50px] rounded-2xl bg-field-bg px-4 text-text-primary placeholder:text-text-muted outline-none focus:ring-2 focus:ring-accent transition-shadow"
           />
         )}
 
@@ -125,14 +124,14 @@ function EntrarConteudo() {
         )}
 
         {status === "aguardando-confirmacao" && (
-          <p className="text-sm" style={{ color: "var(--accent-text)" }}>
+          <p className="text-sm text-accent-text">
             Cadastro quase pronto! Enviamos um link de confirmação para {email} — clique nele para
             ativar sua conta.
           </p>
         )}
 
         {status === "recuperacao-enviada" && (
-          <p className="text-sm" style={{ color: "var(--accent-text)" }}>
+          <p className="text-sm text-accent-text">
             Se {email} estiver cadastrado, enviamos um link de redefinição de senha.
           </p>
         )}
@@ -142,7 +141,7 @@ function EntrarConteudo() {
         <button
           type="submit"
           disabled={status === "loading" || status === "recuperacao-enviada"}
-          className="w-full h-12 rounded-lg bg-accent text-white font-semibold hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full h-[50px] rounded-2xl bg-accent text-white font-extrabold hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {status === "loading"
             ? "Aguarde..."

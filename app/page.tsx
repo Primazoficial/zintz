@@ -2,6 +2,7 @@ import Link from "next/link";
 import { createSupabaseServerClient } from "@/app/lib/supabase-server";
 import type { PastaComContagem } from "@/app/lib/pastas";
 import PastasHomeClient from "@/app/components/PastasHomeClient";
+import Logo from "@/app/components/Logo";
 
 export default async function Home() {
   const supabase = await createSupabaseServerClient();
@@ -12,16 +13,14 @@ export default async function Home() {
   if (!user) {
     return (
       <main className="flex flex-1 flex-col items-center justify-center px-6 py-24 bg-bg-page text-center gap-6">
-        <h1 className="text-4xl font-bold text-text-primary">
-          Zint<span style={{ color: "var(--accent)" }}>z</span>
-        </h1>
+        <Logo size={64} showWordmark tagline />
         <p className="max-w-md text-text-secondary">
           Salvou um achadinho, uma receita, um lugar ou uma rotina de beleza no TikTok ou Instagram?
           Cole o link no Zintz e a gente organiza tudo pra você reencontrar depois.
         </p>
         <Link
           href="/entrar"
-          className="h-12 px-8 rounded-lg bg-accent text-white font-semibold flex items-center hover:opacity-90 transition-opacity"
+          className="h-[50px] px-8 rounded-2xl bg-accent text-white font-extrabold flex items-center hover:opacity-90 transition-opacity"
         >
           Começar
         </Link>

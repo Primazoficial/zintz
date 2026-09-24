@@ -34,8 +34,7 @@ export default function PastaDetalheClient({
         acao={
           <button
             onClick={() => setCriandoCategoria(true)}
-            className="text-sm font-medium"
-            style={{ color: "var(--accent-text)" }}
+            className="h-11 px-1 text-sm font-bold text-accent-text"
           >
             + Nova
           </button>
