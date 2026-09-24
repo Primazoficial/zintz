@@ -15,7 +15,7 @@ export default function PastasHomeClient({ pastas }: { pastas: PastaComContagem[
   return (
     <div className="flex flex-col flex-1 bg-bg-page">
       <header
-        className="flex flex-col gap-6 px-5 pt-6 pb-10 text-white bg-navy"
+        className="flex flex-col gap-6 px-5 pt-6 pb-20 text-white bg-navy"
         style={{ borderBottomLeftRadius: "var(--radius-header)", borderBottomRightRadius: "var(--radius-header)" }}
       >
         <div className="flex items-center justify-between">
