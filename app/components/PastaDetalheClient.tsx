@@ -6,6 +6,7 @@ import AbasPastas from "./AbasPastas";
 import CategoriasBar from "./CategoriasBar";
 import VitrinePasta from "./VitrinePasta";
 import FormNovaCategoria from "./FormNovaCategoria";
+import NavInferior from "./NavInferior";
 import type { FolderCategoria, PastaComContagem, SavedItem } from "@/app/lib/pastas";
 
 export default function PastaDetalheClient({
@@ -49,6 +50,7 @@ export default function PastaDetalheClient({
       <div className="flex-1 overflow-y-auto">
         <VitrinePasta itens={itensFiltrados} categorias={categorias} />
       </div>
+      <NavInferior />
       <FormNovaCategoria
         pastaId={pasta.id}
         aberto={criandoCategoria}
